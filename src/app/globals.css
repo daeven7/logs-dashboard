@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-:root {
+/* :root {
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -23,4 +23,16 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+} */
+
+
+body {
+  margin: 0;
 }
+
+.app {
+  background-image: linear-gradient(120deg, #a6c0fe 0%, #f68084 100%);
+  width: 100vw;
+  height: 100vh;
+}
+
