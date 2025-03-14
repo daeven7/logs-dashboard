@@ -61,5 +61,12 @@ export async function updateSession(request: NextRequest) {
   // If this is not done, you may be causing the browser and server to go out
   // of sync and terminate the user's session prematurely!
 
-  return supabaseResponse
+  // return supabaseResponse
+  
+  const myNewResponse = NextResponse.next({ request })
+  supabaseResponse.cookies.getAll().forEach(cookie => {
+    myNewResponse.cookies.set(cookie.name, cookie.value);
+  });
+  // myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
+  return myNewResponse
 }
