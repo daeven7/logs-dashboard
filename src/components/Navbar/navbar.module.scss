@@ -1,0 +1,26 @@
+.header {
+    // background: "#001529" !important;
+    // background: #383630 !important;
+    background: #384145 !important;
+    padding: 0;
+    height: "60px";
+  }
+  
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+  }
+  
+  .appName {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .navBarButton {
+      background: transparent;
+      border: none;
+      color: white;
+    }

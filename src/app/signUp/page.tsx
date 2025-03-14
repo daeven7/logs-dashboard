@@ -9,7 +9,8 @@ import { Button, Form, Input, notification, Card } from "antd";
 import { Typography } from "antd";
 import Link from "next/link";
 import { signup } from "../login/actions";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+// import { redirect } from "next/navigation";
 
 const { Text } = Typography;
 
@@ -19,13 +20,15 @@ const SignUpPage: React.FC = () => {
 //   const { signUp } = useAuthContext();
 
 //   const [api, contextHolder] = notification.useNotification();
+const router = useRouter()
 
   const onFinish = async (values: any) => {
     try {
     //   await signUp(values);
     //   navigate("/app");
     await signup(values)
-    redirect("/")
+    router.push("/")
+    // redirect("/")
     } catch (err: any) {
     //   AppUtils.openNotification(ALERT_TYPE.ERROR, api, {
     //     message: "Error",

@@ -102,34 +102,36 @@
 //   );
 // }
 
-
 // 'use client'
-import { redirect, useRouter } from 'next/navigation'
+import { redirect, useRouter } from "next/navigation";
 
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from "@/utils/supabase/server";
+import Navbar from "@/components/Navbar/Navbar";
+import DataTable from "@/components/DataTable/DataTable";
+import UploadButton from "@/components/UploadButton/UploadButton";
 
-
-const App= async()=>{
-  console.log("i am in root page")
-  const supabase = await createClient()
+const App = async () => {
+  console.log("i am in root page");
+  const supabase = await createClient();
 
   // const router =  useRouter()
-  const { data, error } = await supabase.auth.getUser()
+  const { data, error } = await supabase.auth.getUser();
   if (error || !data?.user) {
     // redirect('/login')
-    console.error("error in root")
-    redirect("/login")
+    console.error("error in root");
+    redirect("/login");
     // router.push("/login")
-    
   }
 
-  return(
+  return (
     <div className="app">
-      <h1>Helloooo
-         {/* {data.user.email} */}
-         </h1>
+      <Navbar />
+      <div className="flex flex-col justify-center items-center gap-10">
+      <UploadButton/>
+      <DataTable />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

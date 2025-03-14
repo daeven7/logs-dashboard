@@ -1,3 +1,4 @@
+@use '../styles/form.module.scss';
 @import "tailwindcss";
 
 /* :root {
@@ -25,13 +26,15 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 } */
 
+/* @use "../sty" */
 
-body {
-  margin: 0;
-}
+
+// body {
+//   margin: 0;
+// }
 
 .app {
-  background-image: linear-gradient(120deg, #a6c0fe 0%, #f68084 100%);
+  // background-image: linear-gradient(120deg, #a6c0fe 0%, #f68084 100%);
   width: 100vw;
   height: 100vh;
 }
