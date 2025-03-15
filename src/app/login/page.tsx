@@ -1,23 +1,9 @@
-// import { login, signup } from './actions'
-
-// export default function LoginPage() {
-//   return (
-//     <form>
-//       <label htmlFor="email">Email:</label>
-//       <input id="email" name="email" type="email" required />
-//       <label htmlFor="password">Password:</label>
-//       <input id="password" name="password" type="password" required />
-//       <button formAction={login}>Log in</button>
-//       <button formAction={signup}>Sign up</button>
-//     </form>
-//   )
-// }
 
 'use client'
 import React from "react";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { GoogleOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input, notification, Card, Typography } from "antd";
-import { login } from "./actions";
+import { login, signInWithGoogle } from "./actions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 // import { Link } from "react-router-dom";
@@ -41,6 +27,7 @@ const SignInPage: React.FC = () => {
       // await login(values);
       // navigate("/app");
       await login(values)
+      // await signInWithGithub()
       console.log("login successful in onfinish")
       router.push("/")
       // redirect
@@ -94,11 +81,23 @@ const SignInPage: React.FC = () => {
                 placeholder="Password"
               />
             </Form.Item>
-
+            <Form.Item>
+            <Button icon={<GoogleOutlined />} onClick={signInWithGoogle}  className="button w-full" iconPosition="end">
+              Sign In With Google
+              </Button>
+              </Form.Item>
             <Form.Item>
               <Button block type="primary" htmlType="submit" className="button">
                 Sign In
               </Button>
+
+              {/* <Form.Item> */}
+              {/* <Button onClick={signInWithGoogle} block type="primary"  className="button">
+                Sign In With Google <GoogleOutlined />
+              </Button> */}
+              
+             
+            {/* </Form.Item> */}
               <div className="formFooter">
                 or{" "}
                 <Link href="/signUp" className="link">

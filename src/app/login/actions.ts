@@ -66,3 +66,19 @@ export async function signup(formData: UserSignInType) {
   // revalidatePath('/', 'layout')
   // redirect('/')
 }
+
+export async function signInWithGithub() {
+  const supabase = await createClient()
+  // const { data, error } = await supabase.auth.signInWithOAuth({
+  //   provider: 'github',
+  // })
+
+  await supabase.auth.signInWithOAuth({
+    // provider: 'github',
+    provider: 'google',
+    options: {
+      // redirectTo: `http://localhost:3000`,
+      redirectTo: `http://localhost:3000/auth/callback`,
+    },
+  })
+}
