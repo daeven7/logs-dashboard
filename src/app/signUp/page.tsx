@@ -1,48 +1,29 @@
-'use client'
+"use client";
 import React from "react";
 import { LockOutlined, UserOutlined, MailOutlined } from "@ant-design/icons";
-import { Button, Form, Input, notification, Card } from "antd";
-// import { useAuthContext } from "../../hooks/auth";
-// import { Link, useNavigate } from "react-router-dom";
-// import { AppUtils } from "../../utils/app.utils";
-// import { ALERT_TYPE } from "../../types/alert.type";
+import { Button, Form, Input, Card } from "antd";
 import { Typography } from "antd";
 import Link from "next/link";
-import { signup } from "../login/actions";
+import { signup } from "../../utils/actions";
 import { useRouter } from "next/navigation";
-// import { redirect } from "next/navigation";
 
 const { Text } = Typography;
 
 const SignUpPage: React.FC = () => {
-//   const navigate = useNavigate();
-
-//   const { signUp } = useAuthContext();
-
-//   const [api, contextHolder] = notification.useNotification();
-const router = useRouter()
+  const router = useRouter();
 
   const onFinish = async (values: any) => {
     try {
-    //   await signUp(values);
-    //   navigate("/app");
-    await signup(values)
-    router.push("/")
-    // redirect("/")
+      await signup(values);
+      router.push("/");
     } catch (err: any) {
-    //   AppUtils.openNotification(ALERT_TYPE.ERROR, api, {
-    //     message: "Error",
-    //     description: e.message,
-    //     placement: "topRight",
-    //   });
-    console.error("error onfinish signup ", err)
+      console.error("Error in signup ", err);
     }
   };
 
   return (
     <div className="centeredForm">
       <Card className="formCard">
-        {/* {contextHolder} */}
         <div className="container">
           <Text strong className="formTitle">
             Sign Up

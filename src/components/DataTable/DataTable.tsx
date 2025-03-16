@@ -1,123 +1,35 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Space, Table, Tag } from "antd";
-import type { TableProps } from "antd";
+import { Table, Tag } from "antd";
+import { DataType } from "@/types/table.types";
+import { AppUtils } from "@/utils/app.utils";
+import { convertToDataType } from "@/utils/helper";
 
-const { Column, ColumnGroup } = Table;
-
-// let jsonData = {
-//   event: "job-completed",
-//   stats: [
-//     {
-//       id: 54,
-//       created_at: "2025-03-13T14:02:51.64223+00:00",
-//       file_id: "656209cc-7b12-9353-d80b-b65dcb09aad8",
-//       timestamp: "2025-01-20T10:00:00+00:00",
-//       level: "ERROR",
-//       message: "Database timeout",
-//       json_payload: { userId: 123, ip: "192.168.1.1" },
-//       error: true,
-//       keywords: "",
-//       ip_address: "192.168.1.1",
-//       user_Id: "123",
-//     },
-//     {
-//       id: 55,
-//       created_at: "2025-03-13T14:02:51.64223+00:00",
-//       file_id: "656209cc-7b12-9353-d80b-b65dcb09aad8",
-//       timestamp: "2025-03-20T10:02:00+00:00",
-//       level: "ERROR",
-//       message: "Connection lost",
-//       json_payload: { userId: 125, ip: "192.168.1.3" },
-//       error: true,
-//       keywords: "",
-//       ip_address: "192.168.1.3",
-//       user_Id: "125",
-//     },
-//     {
-//       id: 56,
-//       created_at: "2025-03-13T14:02:51.64223+00:00",
-//       file_id: "656209cc-7b12-9353-d80b-b65dcb09aad8",
-//       timestamp: "2025-04-20T10:02:00+00:00",
-//       level: "DEBUG",
-//       message: "Requesting Permissions",
-//       json_payload: { userId: 3434, ip: "192.168.1.3" },
-//       error: false,
-//       keywords: "permissions,auth",
-//       ip_address: "192.168.1.3",
-//       user_Id: "3434",
-//     },
-//   ],
-// };
-
-const convertToDataType = (json: any): DataType[] => {
-  return json.stats.map((stat: any) => ({
-    key: String(stat.id), // Convert `id` to string
-    timestamp: stat.timestamp,
-    fileId: stat.file_id,
-    level: stat.level,
-    logMessage: stat.message,
-    userId: String(stat.user_Id), // Ensure userId is a string
-    ip: stat.ip_address,
-    error: stat.error,
-    keywords: stat.keywords.split(","),
-  }));
-};
-
-interface DataType {
-  key: string;
-  timestamp: string;
-  fileId: string;
-  level: string;
-  logMessage: string;
-  userId: string;
-  ip: string;
-  error: boolean;
-  keywords: string[];
-}
-
-// const data: DataType[] = convertToDataType(jsonData);
-
-// console.log("convertToDataType", data);
-
-const MAX_ENTRIES = 100;
+const { Column } = Table;
 
 const DataTable = () => {
-  const [stats, setStats] = useState<DataType[]>([]); // Replace `any` with your stats type
+  const [stats, setStats] = useState<DataType[]>([]);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:4000/api/live-stats"); // Replace with your server URL
+    const socket = new WebSocket(AppUtils.LIVE_STATS_ENDPOINT);
 
     socket.onopen = () => {
       console.log("Connected to WebSocket server");
     };
 
-    // socket.onmessage = (event) => {
-    //   console.log("Message from server:", event.data);
-    //   try {
-    //     let newData = convertToDataType(JSON.parse(event.data));
-    //     let updatedStats = [...newData, ...stats];
-    //     console.log("updated stats", updatedStats, updatedStats.length);
-    //     setStats(updatedStats.slice(0, MAX_ENTRIES));
-    //   } catch (error) {
-    //     console.error("Error parsing WebSocket message:", error);
-    //   }
-    // };
-
     socket.onmessage = (event) => {
-        console.log("Message from server:", event.data);
-        try {
-          let newData = convertToDataType(JSON.parse(event.data));
-          setStats((prevStats) => {
-            let updatedStats = [...newData, ...prevStats];
-            // console.log("updated stats", updatedStats, updatedStats.length);
-            return updatedStats.slice(0, MAX_ENTRIES); // Limit array size to MAX_ENTRIES
-          });
-        } catch (error) {
-          console.error("Error parsing WebSocket message:", error);
-        }
-      };
+      console.log("Message from server:", event.data);
+      try {
+        let newData = convertToDataType(JSON.parse(event.data));
+        setStats((prevStats) => {
+          let updatedStats = [...newData, ...prevStats];
+          return updatedStats.slice(0, AppUtils.MAX_ENTRIES);
+        });
+      } catch (error) {
+        console.error("Error parsing WebSocket message:", error);
+      }
+    };
 
     socket.onclose = () => {
       console.log("WebSocket connection closed");
@@ -128,17 +40,15 @@ const DataTable = () => {
     };
 
     return () => {
-      socket.close(); // Cleanup WebSocket connection on unmount
+      socket.close();
     };
   }, []);
 
   return (
     <>
       <Table<DataType> dataSource={stats} className="w-4/5">
-        {/* <ColumnGroup title="Name"> */}
         <Column title="Timestamp" dataIndex="timestamp" key="timestamp" />
         <Column title="File Id" dataIndex="fileId" key="fileId" />
-        {/* <Column title="Log Level" dataIndex="level" key="level" /> */}
 
         <Column
           title="Log Level"
@@ -156,7 +66,6 @@ const DataTable = () => {
           }}
         />
 
-        {/* </ColumnGroup> */}
         <Column title="Message" dataIndex="logMessage" key="logMessage" />
         <Column title="IP Address" dataIndex="ip" key="ip" />
         <Column
